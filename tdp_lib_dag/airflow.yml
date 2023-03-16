@@ -3,4 +3,15 @@
   depends_on: []
 
 - name: airflow_config
-  depends_on: airflow_install
+  depends_on: 
+    - airflow_install
+
+- name: airflow_webserver_install
+  depends_on:
+    - airflow_config
+
+- name: airflow_webserver_config
+  depends_on:
+    - airflow_config
+    - airflow_webserver_install
+

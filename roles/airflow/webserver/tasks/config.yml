@@ -1,0 +1,27 @@
+---
+- name: Airflow | webserver | Database Init
+  shell: "{{ airflow_executable }} db init"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | webserver | Create admin user
+  shell: |
+    "{{ airflow_executable }} users create \
+      --username {{ airflow_admin_user }} \
+      --password {{ airflow_admin_pass }} \
+      --role Admin \
+      --firstname admin \
+      --lastname admin \
+      --email admin@tdp"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | webserver | Copy webserver_config.py file
+  template:
+    src: webserver_config.py.j2
+    dest: "{{ airflow_install_dir }}/webserver_config.py"
+
+- name: Airflow | webserver | Copy webserver service file
+  template:
+    src: airflow-webserver.service.j2
+    dest: /usr/lib/systemd/system/airflow-webserver.service

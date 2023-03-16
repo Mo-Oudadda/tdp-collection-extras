@@ -12,6 +12,7 @@
     - "{{ airflow_log_dir }}"
     - "{{ airflow_pid_dir }}"
     - "{{ airflow_dag_dir }}"
+    - "{{ airflow_plugins_dir }}"
 
 - name: Airflow | Copy airflow.cfg file
   template:

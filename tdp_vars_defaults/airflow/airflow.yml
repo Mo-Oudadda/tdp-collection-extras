@@ -16,6 +16,7 @@ airflow_install_dir: "{{ airflow_root_dir }}/{{ airflow_app_name }}"
 airflow_log_dir: /var/log/airflow
 airflow_pid_dir: /run/airflow
 airflow_dag_dir: "{{ airflow_install_dir }}/dags"
+airflow_plugins_dir: "{{ airflow_install_dir }}/plugins"
 
 # Airflow Executable:
 airflow_executable: /usr/local/bin/airflow
@@ -26,7 +27,7 @@ airflow_db_pass: airflow123
 airflow_db_host: tdp-db-1.lxd
 airflow_db_port: 5432
 airflow_db_name: airflow_db
-aitflow_sql_alchemy_conn: "postgresql+psycopg2://{{ airflow_db_user }}:{{ airflow_db_pass }}@{{ airflow_db_host }}:{{ airflow_db_port }}/{{ airflow_db_name }}"
+airflow_sql_alchemy_conn: "postgresql+psycopg2://{{ airflow_db_user }}:{{ airflow_db_pass }}@{{ airflow_db_host }}:{{ airflow_db_port }}/{{ airflow_db_name }}"
 
 # Airflow admin user
 airflow_admin_user: admin
