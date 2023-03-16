@@ -1,12 +1,12 @@
 ---
-- name: Deploy airflow | Install
+- name: Deploy airflow | Configure
   hosts: airflow
   strategy: linear
   tasks:
     - tosit.tdp.resolve: # noqa unnamed-task
         node_name: airflow
-    - name: Install airflow
+    - name: Config airflow
       import_role:
         name: tosit.tdp_extra.airflow.common
-        tasks_from: install
+        tasks_from: config
     - meta: clear_facts # noqa unnamed-task

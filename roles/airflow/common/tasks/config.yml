@@ -1,0 +1,29 @@
+---
+- name: Airflow | Ensure airflow directories
+  become: yes
+  become_user: root
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+    mode: 0755
+  with_items:
+    - "{{ airflow_log_dir }}"
+    - "{{ airflow_pid_dir }}"
+    - "{{ airflow_dag_dir }}"
+
+- name: Airflow | Copy airflow.cfg file
+  template:
+    src: airflow.cfg.j2
+    dest: "{{ airflow_install_dir }}/airflow.cfg"
+
+- name: Airflow | Copy profile.d file
+  template:
+    src: airflow-profile.d.j2
+    dest: "/etc/profile.d/airflow.sh"
+  register: airflow_profile
+
+- name: Airflow | Reload Airflow profile
+  shell: source /etc/profile.d/airflow.sh
+  when: airflow_profile.changed
