@@ -6,13 +6,13 @@
 
 - name: Airflow | webserver | Create admin user
   shell: |
-    "{{ airflow_executable }} users create \
+    "{{ airflow_executable }}" users create \
       --username {{ airflow_admin_user }} \
       --password {{ airflow_admin_pass }} \
       --role Admin \
       --firstname admin \
       --lastname admin \
-      --email admin@tdp"
+      --email admin@tdp
   environment:
     AIRFLOW_HOME: "{{ airflow_install_dir }}"
 
