@@ -14,9 +14,11 @@ airflow_group: airflow
 airflow_root_dir: /opt/tdp
 airflow_install_dir: "{{ airflow_root_dir }}/{{ airflow_app_name }}"
 airflow_log_dir: /var/log/airflow
+airflow_root_conf_dir: /etc/airflow
 airflow_pid_dir: /run/airflow
 airflow_dag_dir: "{{ airflow_install_dir }}/dags"
 airflow_plugins_dir: "{{ airflow_install_dir }}/plugins"
+airflow_certs_dir: "{{ airflow_root_conf_dir }}/certs"
 
 # Airflow Executable:
 airflow_executable: /usr/local/bin/airflow
@@ -48,3 +50,17 @@ airflow_required_packages:
 # Python dependencies
 airflow_required_python_packages:
   - psycopg2-binary
+
+#SSL configuration
+certificates_path: /etc/ssl/certs
+certificates_cert_filename: "{{ ansible_fqdn }}"
+certificates_ca_filename: "tdp_ca"
+certificates_public_key: "{{ certificates_path }}/{{ certificates_cert_filename }}.pem"
+certificates_private_key: "{{ certificates_path }}/{{ certificates_cert_filename }}.key"
+certificates_ca: "{{ certificates_path }}/{{ certificates_ca_filename }}.crt" 
+airflow_public_key: "{{ airflow_certs_dir }}/{{ certificates_cert_filename }}.pem"
+airflow_private_key: "{{ airflow_certs_dir }}/{{ certificates_cert_filename }}.key"
+ca_certificate_file: "{{ airflow_certs_dir }}/{{ certificates_ca_filename }}.crt"
+
+ssl_certificate: "{{ airflow_public_key }}"
+ssl_private_key: "{{ airflow_private_key }}"

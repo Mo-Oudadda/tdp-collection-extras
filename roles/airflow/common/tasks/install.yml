@@ -8,13 +8,18 @@
     name: "{{ airflow_user }}"
     group: "{{ airflow_group }}"
 
-- name: Ensures {{ airflow_root_dir }} exists
+- name: Airfloww | Ensures airflow install, certificates and configuration directories
   file:
-    path: "{{ airflow_root_dir }}/airflow-{{ airflow_version }}"
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
-    mode: "755"
+    mode: 0755
+  with_items:
+    - "{{ airflow_root_dir }}/airflow-{{ airflow_version }}"
+    - "{{ airflow_certs_dir }}"
+    - "{{ airflow_root_conf_dir }}"
+
 
 - name: Airflow | Create symbolic link to Airflow installation
   file:
@@ -43,19 +48,19 @@
   yum:
     pkg: "{{ airflow_required_packages }}"
     state: present
+    
+- name: Airflow | Pip install celery 
+  become: true
+  become_user: "{{ airflow_user }}"
+  pip:
+    name: "celery"
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt
 
-# - name: Airflow | Pip install celery 
-#   become: true
-#   become_user: "{{ airflow_user }}"
-#   pip:
-#     name: "celery"
-#     executable: pip3
-#     extra_args: --constraint /tmp/constraints-3.6.txt
-
-# - name: Airflow | Pip install redis
-#   become: true
-#   become_user: "{{ airflow_user }}"
-#   pip:
-#     name: "redis"
-#     executable: pip3
-#     extra_args: --constraint /tmp/constraints-3.6.txt
+- name: Airflow | Pip install redis
+  become: true
+  become_user: "{{ airflow_user }}"
+  pip:
+    name: "redis"
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt

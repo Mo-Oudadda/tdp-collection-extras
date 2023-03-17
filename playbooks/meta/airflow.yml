@@ -4,6 +4,7 @@
 ---
 # Install airflow
 - import_playbook: ../airflow_install.yml
+- import_playbook: ../airflow_ssl-tls.yml
 - import_playbook: ../airflow_config.yml
 
 # Webserver

@@ -14,6 +14,18 @@
     - "{{ airflow_dag_dir }}"
     - "{{ airflow_plugins_dir }}"
 
+- name: Airflow | Change ownership and permissions of Airflow SSL keys
+  become: yes
+  become_user: root
+  file:
+    path: "{{ item }}"
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+    mode: 0755
+  with_items:
+    - "{{certificates_public_key}}"
+    - "{{ certificates_private_key }}"
+
 - name: Airflow | Copy airflow.cfg file
   template:
     src: airflow.cfg.j2
