@@ -1,3 +1,6 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
 ---
 - name: Airflow | Add airflow group
   group:
@@ -48,3 +51,11 @@
   yum:
     pkg: "{{ airflow_required_packages }}"
     state: present
+
+- name: Airflow | Pip install celery and redis
+  pip:
+    name:
+      - celery
+      - redis
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt

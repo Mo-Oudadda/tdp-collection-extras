@@ -18,3 +18,8 @@
 # Worker
 - import_playbook: ../airflow_worker_install.yml
 - import_playbook: ../airflow_worker_config.yml
+
+# Start services
+- import_playbook: ../airflow_webserver_start.yml
+- import_playbook: ../airflow_scheduler_start.yml
+- import_playbook: ../airflow_worker_start.yml
