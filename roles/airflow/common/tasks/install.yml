@@ -48,19 +48,3 @@
   yum:
     pkg: "{{ airflow_required_packages }}"
     state: present
-    
-- name: Airflow | Pip install celery 
-  become: true
-  become_user: "{{ airflow_user }}"
-  pip:
-    name: "celery"
-    executable: pip3
-    extra_args: --constraint /tmp/constraints-3.6.txt
-
-- name: Airflow | Pip install redis
-  become: true
-  become_user: "{{ airflow_user }}"
-  pip:
-    name: "redis"
-    executable: pip3
-    extra_args: --constraint /tmp/constraints-3.6.txt

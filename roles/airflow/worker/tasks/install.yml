@@ -1,0 +1,15 @@
+---
+- name: Airflow | Ensure common airflow installation tasks are performed
+  import_role:
+    name: tosit.tdp_extra.airflow.common
+    tasks_from: install
+
+- name: Airflow | Pip install celery and redis
+  become: true
+  become_user: "{{ airflow_user }}"
+  pip:
+    name:
+      - celery
+      - redis
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt

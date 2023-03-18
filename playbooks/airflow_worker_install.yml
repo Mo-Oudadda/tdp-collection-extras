@@ -1,0 +1,12 @@
+---
+- name: Deploy airflow | Worker Install
+  hosts: airflow_worker
+  strategy: linear
+  tasks:
+    - tosit.tdp.resolve: # noqa unnamed-task
+        node_name: airflow_worker
+    - name: Install airflow worker dependencies
+      import_role:
+        name: tosit.tdp_extra.airflow.worker
+        tasks_from: install
+    - meta: clear_facts # noqa unnamed-task

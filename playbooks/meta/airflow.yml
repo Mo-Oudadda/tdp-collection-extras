@@ -10,3 +10,11 @@
 # Webserver
 - import_playbook: ../airflow_webserver_install.yml
 - import_playbook: ../airflow_webserver_config.yml
+
+# Scheduler
+- import_playbook: ../airflow_scheduler_install.yml
+- import_playbook: ../airflow_scheduler_config.yml
+
+# Worker
+- import_playbook: ../airflow_worker_install.yml
+- import_playbook: ../airflow_worker_config.yml

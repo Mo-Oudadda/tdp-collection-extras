@@ -20,3 +20,32 @@
     - airflow_config
     - airflow_webserver_install
 
+- name: airflow_scheduler_install
+  depends_on:
+    - airflow_install
+    - airflow_webserver_install
+
+- name: airflow_scheduler_config
+  depends_on:
+    - airflow_install
+    - airflow_webserver_install
+    - airflow_scheduler_install
+    - airflow_config
+    - airflow_webserver_config
+
+- name: airflow_worker_install
+  depends_on:
+    - airflow_install
+    - airflow_webserver_install
+    - airflow_scheduler_install
+
+- name: airflow_worker_config
+  depends_on:
+    - airflow_install
+    - airflow_webserver_install
+    - airflow_scheduler_install
+    - airflow_worker_install
+    - airflow_config
+    - airflow_webserver_config
+    - airflow_scheduler_config
+
