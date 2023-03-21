@@ -4,6 +4,6 @@
 - name: Airflow | Start airflow-webserver service
   systemd:
     name: airflow-webserver
-    state: started
+    state: restarted
     enabled: true
     daemon_reload: true

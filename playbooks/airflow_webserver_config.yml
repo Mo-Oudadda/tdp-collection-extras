@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Deploy airflow webserver | Configure
+- name: DDeploy airflow | Webserver Config
   hosts: airflow_webserver
   strategy: linear
   tasks:

@@ -465,11 +465,11 @@ web_server_port = 8080
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
-web_server_ssl_cert = {{ certificates_public_key }}
+web_server_ssl_cert = {{ airflow_public_key }}
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
-web_server_ssl_key = {{ certificates_private_key }}
+web_server_ssl_key = {{ airflow_private_key }}
 
 # Number of seconds the webserver waits before killing gunicorn master that doesn't respond
 web_server_master_timeout = 120
@@ -743,9 +743,9 @@ sync_parallelism = 0
 
 # Import path for celery configuration options
 celery_config_options = airflow.config_templates.default_celery.DEFAULT_CELERY_CONFIG
-ssl_active = False
-ssl_key = {{ airflow_public_key }}
-ssl_cert = {{ airflow_private_key }}
+ssl_active = True
+ssl_key = {{ airflow_private_key }}
+ssl_cert = {{ airflow_public_key }}
 ssl_cacert =
 
 # Celery Pool implementation.
@@ -843,7 +843,7 @@ scheduler_health_check_threshold = 30
 
 # How often (in seconds) should the scheduler check for orphaned tasks and SchedulerJobs
 orphaned_tasks_check_interval = 300.0
-child_process_log_directory = {{ airflow_log_dir }}/scheduler
+child_process_log_directory = {{ airflow_child_process_log_dir }}
 
 # Local task jobs periodically heartbeat to the DB. If the job has
 # not heartbeat in this many seconds, the scheduler will mark the

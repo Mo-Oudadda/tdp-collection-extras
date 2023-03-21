@@ -4,13 +4,13 @@
 - name: Airflow | Start airflow-worker service
   systemd:
     name: airflow-worker
-    state: started
+    state: restarted
     enabled: true
     daemon_reload: true
 
 - name: Airflow | Start airflow-flower service
   systemd:
     name: airflow-flower
-    state: started
+    state: restarted
     enabled: true
     daemon_reload: true

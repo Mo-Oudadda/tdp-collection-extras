@@ -19,7 +19,7 @@
 - import_playbook: ../airflow_worker_install.yml
 - import_playbook: ../airflow_worker_config.yml
 
-# Start services
-- import_playbook: ../airflow_webserver_start.yml
-- import_playbook: ../airflow_scheduler_start.yml
-- import_playbook: ../airflow_worker_start.yml
+# Start/restart services
+- import_playbook: ../airflow_webserver_restart.yml
+- import_playbook: ../airflow_scheduler_restart.yml
+- import_playbook: ../airflow_worker_restart.yml

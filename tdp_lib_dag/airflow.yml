@@ -11,50 +11,33 @@
     - airflow_install
     - airflow_ssl-tls
 
-- name: airflow_webserver_install
-  depends_on:
-    - airflow_config
-
 - name: airflow_webserver_config
   depends_on:
-    - airflow_config
-    - airflow_webserver_install
-
-- name: airflow_scheduler_install
-  depends_on:
     - airflow_install
-    - airflow_webserver_install
+    - airflow_config
 
 - name: airflow_scheduler_config
   depends_on:
-    - airflow_scheduler_install
+    - airflow_install
     - airflow_config
     - airflow_webserver_config
-
-- name: airflow_worker_install
-  depends_on:
-    - airflow_install
-    - airflow_webserver_install
-    - airflow_scheduler_install
 
 - name: airflow_worker_config
   depends_on:
-    - airflow_worker_install
+    - airflow_install
     - airflow_config
-    - airflow_webserver_config
-    - airflow_scheduler_config
 
-- name: airflow_webserver_start
+- name: airflow_webserver_restart
   depends_on:
-    - airflow_webserver_install
+    - airflow_install
     - airflow_webserver_config
 
-- name: airflow_scheduler_start
+- name: airflow_scheduler_restart
   depends_on:
-    - airflow_scheduler_install
+    - airflow_install
     - airflow_scheduler_config
 
-- name: airflow_worker_start
+- name: airflow_worker_restart
   depends_on:
-    - airflow_worker_install
+    - airflow_install
     - airflow_worker_config

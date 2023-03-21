@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Airflow | SSL-TLS
+- name: Deploy airflow | SSL-TLS
   hosts: airflow
   tasks:
     - tosit.tdp.resolve: # noqa unnamed-task

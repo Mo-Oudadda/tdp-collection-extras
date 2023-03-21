@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Deploy airflow | Install
+- name: Deploy airflow | Common Install
   hosts: airflow
   strategy: linear
   tasks:

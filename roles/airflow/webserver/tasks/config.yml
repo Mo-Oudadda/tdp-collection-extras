@@ -2,22 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Airflow | Database Init
-  shell: "{{ airflow_executable }} db init"
-  environment:
-    AIRFLOW_HOME: "{{ airflow_install_dir }}"
-
-- name: Airflow | Create admin user
-  shell: |
-    "{{ airflow_executable }}" users create \
-      --username {{ airflow_admin_user }} \
-      --password {{ airflow_admin_pass }} \
-      --role Admin \
-      --firstname admin \
-      --lastname admin \
-      --email admin@tdp
-  environment:
-    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+# - name: Airflow Webserver | Ensure airflow is configured
+#   import_role:
+#     name: tosit.tdp_extra.airflow.common
+#     tasks_from: config
 
 - name: Airflow | Copy webserver_config.py file
   template:

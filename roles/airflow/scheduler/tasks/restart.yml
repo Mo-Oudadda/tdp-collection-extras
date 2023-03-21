@@ -1,9 +1,16 @@
 # Copyright 2022 TOSIT.IO
 # SPDX-License-Identifier: Apache-2.0
 ---
+- name: Airflow | Start redis service
+  systemd:
+    name: redis
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
 - name: Airflow | Start airflow-scheduler service
   systemd:
     name: airflow-scheduler
-    state: started
+    state: restarted
     enabled: true
     daemon_reload: true

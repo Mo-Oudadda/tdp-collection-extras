@@ -23,7 +23,6 @@
     - "{{ airflow_certs_dir }}"
     - "{{ airflow_root_conf_dir }}"
 
-
 - name: Airflow | Create symbolic link to Airflow installation
   file:
     src: "{{ airflow_root_dir }}/airflow-{{ airflow_version }}"
@@ -43,7 +42,7 @@
 
 - name: Airflow | Pip install airflow {{ airflow_version }}
   pip:
-    name: "apache-airflow=={{ airflow_version }}"
+    name: "apache-airflow[celery]=={{ airflow_version }}"
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt
 
@@ -52,10 +51,8 @@
     pkg: "{{ airflow_required_packages }}"
     state: present
 
-- name: Airflow | Pip install celery and redis
+- name: Airflow | Pip install flower
   pip:
-    name:
-      - celery
-      - redis
+    name: flower
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt

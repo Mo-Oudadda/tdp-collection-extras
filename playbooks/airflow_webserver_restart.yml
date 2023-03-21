@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Deploy airflow | Webserver Start
+- name: Deploy airflow | Restart webserver
   hosts: airflow_webserver
   strategy: linear
   tasks:
     - tosit.tdp.resolve: # noqa unnamed-task
         node_name: airflow_webserver
-    - name: Start webserver
+    - name: Restart webserver
       import_role:
         name: tosit.tdp_extra.airflow.webserver
-        tasks_from: start
+        tasks_from: restart
     - meta: clear_facts # noqa unnamed-task

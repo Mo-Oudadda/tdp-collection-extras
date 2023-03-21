@@ -18,6 +18,7 @@ airflow_root_conf_dir: /etc/airflow
 airflow_pid_dir: /run/airflow
 airflow_dag_dir: "{{ airflow_install_dir }}/dags"
 airflow_plugins_dir: "{{ airflow_install_dir }}/plugins"
+airflow_child_process_log_dir: "{{ airflow_log_dir }}/scheduler"
 airflow_certs_dir: "{{ airflow_root_conf_dir }}/certs"
 
 # Airflow Executable:
@@ -43,7 +44,7 @@ airflow_broker_url: "redis://edge-01:6379/0"
 # Required packages
 airflow_required_packages:
   - gcc-c++
-  - python-devel.x86_64
+  - python3-devel.x86_64
   - cyrus-sasl-devel.x86_64
   - krb5-devel
 
