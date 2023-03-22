@@ -18,15 +18,3 @@
     group: "{{ airflow_group }}"
     mode: "0600"
   when: krb_create_principals_keytabs
-
-- name: Ensure airflow's keytab is working
-  import_role:
-    name: tosit.tdp.utils.kerberos
-    tasks_from: check_secure_keytab
-  vars:
-    principal: airflow/{{ ansible_fqdn }}
-    keytab: airflow.service.keytab
-    user: "{{ airflow_user }}"
-    group: "{{ airflow_group }}"
-    mode: "640"
-  when: not krb_create_principals_keytabs
