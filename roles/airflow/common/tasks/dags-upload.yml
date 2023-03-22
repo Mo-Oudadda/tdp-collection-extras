@@ -1,0 +1,12 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Airflow | Upload airflow example DAGs files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ airflow_dag_dir }}"
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+  with_fileglob:
+    - "{{ airflow_dags_files_path }}/*"

@@ -72,3 +72,6 @@ kerberos:
   airflow_keytab: "/etc/security/keytabs/airflow.service.keytab"
   airflow_principal: "airflow/{{ ansible_fqdn }}@{{ realm }}"
   kinit_path: "/usr/bin/kinit"
+
+# Example DAGs files
+airflow_dags_files_path: "files/airflow_example_dags"
