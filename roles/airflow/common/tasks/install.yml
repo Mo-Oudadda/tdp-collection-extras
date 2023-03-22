@@ -62,3 +62,15 @@
     name: redis
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt
+
+- name: Airflow | Pip install apache-hive provider
+  pip:
+    name: apache-airflow-providers-apache-hive
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt
+
+- name: Airflow | Pip install apache-spark provider
+  pip:
+    name: apache-airflow-providers-apache-spark
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt
