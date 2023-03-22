@@ -15,7 +15,6 @@
     - "{{ airflow_log_dir }}"
     - "{{ airflow_child_process_log_dir }}"
     - "{{ airflow_root_conf_dir }}"
-    - "{{ airflow_pid_dir }}"
     - "{{ airflow_dag_dir }}"
     - "{{ airflow_plugins_dir }}"
 
@@ -28,6 +27,7 @@
     group: "{{ airflow_group }}"
     mode: 0755
   with_items:
+    - "{{ airflow_log_dir }}"
     - "{{certificates_public_key}}"
     - "{{ certificates_private_key }}"
 

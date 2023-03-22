@@ -52,7 +52,7 @@ airflow_required_packages:
 airflow_required_python_packages:
   - psycopg2-binary
 
-#SSL configuration
+# SSL configuration
 certificates_path: /etc/ssl/certs
 certificates_cert_filename: "{{ ansible_fqdn }}"
 certificates_ca_filename: "tdp_ca"
@@ -65,3 +65,10 @@ ca_certificate_file: "{{ airflow_certs_dir }}/{{ certificates_ca_filename }}.crt
 
 ssl_certificate: "{{ airflow_public_key }}"
 ssl_private_key: "{{ airflow_private_key }}"
+
+# Kerberos
+krb_create_principals_keytabs: yes
+kerberos:
+  airflow_keytab: "/etc/security/keytabs/airflow.service.keytab"
+  airflow_principal: "airflow/{{ ansible_fqdn }}@{{ realm }}"
+  kinit_path: "/usr/bin/kinit"

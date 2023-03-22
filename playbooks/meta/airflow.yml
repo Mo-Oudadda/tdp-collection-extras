@@ -5,6 +5,7 @@
 # Install airflow
 - import_playbook: ../airflow_install.yml
 - import_playbook: ../airflow_ssl-tls.yml
+- import_playbook: ../airflow_kerberos.yml
 - import_playbook: ../airflow_config.yml
 
 # Webserver
@@ -21,5 +22,5 @@
 
 # Start/restart services
 - import_playbook: ../airflow_webserver_restart.yml
-- import_playbook: ../airflow_scheduler_restart.yml
 - import_playbook: ../airflow_worker_restart.yml
+- import_playbook: ../airflow_scheduler_restart.yml

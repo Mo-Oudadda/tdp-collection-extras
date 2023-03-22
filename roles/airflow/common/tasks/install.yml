@@ -42,7 +42,7 @@
 
 - name: Airflow | Pip install airflow {{ airflow_version }}
   pip:
-    name: "apache-airflow[celery]=={{ airflow_version }}"
+    name: "apache-airflow[celery, kerberos]=={{ airflow_version }}"
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt
 
@@ -54,5 +54,11 @@
 - name: Airflow | Pip install flower
   pip:
     name: flower
+    executable: pip3
+    extra_args: --constraint /tmp/constraints-3.6.txt
+
+- name: Airflow | Pip install redis
+  pip:
+    name: redis
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt

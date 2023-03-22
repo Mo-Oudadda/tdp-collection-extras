@@ -104,7 +104,7 @@ max_active_runs_per_dag = 16
 # Whether to load the DAG examples that ship with Airflow. It's good to
 # get started, but you probably want to set this to ``False`` in a production
 # environment
-load_examples = True
+load_examples = False
 
 # Whether to load the default connections that ship with Airflow. It's good to
 # get started, but you probably want to set this to ``False`` in a production
@@ -449,9 +449,9 @@ default_hive_mapred_queue =
 # The base url of your website as airflow cannot guess what domain or
 # cname you are using. This is used in automated emails that
 # airflow sends to point links to the right web server
-base_url = http://localhost:8080
+base_url = http://localhost:8280
 
-# Default timezone to display all dates in the UI, can be UTC, system, or
+# Default timezone to display all dates in the UI, can be UTC, system8080, or
 # any IANA timezone string (e.g. Europe/Amsterdam). If left empty the
 # default value of core/default_timezone will be used
 # Example: default_ui_timezone = America/New_York
@@ -461,7 +461,7 @@ default_ui_timezone = UTC
 web_server_host = 0.0.0.0
 
 # The port on which to run the web server
-web_server_port = 8080
+web_server_port = 8280
 
 # Paths to the SSL certificate and key for the web server. When both are
 # provided SSL will be enabled. This does not change the web server port.
@@ -743,7 +743,7 @@ sync_parallelism = 0
 
 # Import path for celery configuration options
 celery_config_options = airflow.config_templates.default_celery.DEFAULT_CELERY_CONFIG
-ssl_active = True
+ssl_active = False
 ssl_key = {{ airflow_private_key }}
 ssl_cert = {{ airflow_public_key }}
 ssl_cacert =
@@ -917,9 +917,9 @@ default_capacity = 1000
 
 [kerberos]
 ccache = /tmp/airflow_krb5_ccache
-keytab = /etc/security/keytabs/airflow.keytab
+keytab = {{ kerberos.airflow_keytab }}
 reinit_frequency = 3600
-principal = airflow/_HOST@REALM.TDP
+principal = {{ kerberos.airflow_principal }}
 
 # Allow to disable ticket forwardability.
 forwardable = True
