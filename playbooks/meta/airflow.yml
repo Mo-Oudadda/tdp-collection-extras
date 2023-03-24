@@ -7,7 +7,6 @@
 - import_playbook: ../airflow_ssl-tls.yml
 - import_playbook: ../airflow_kerberos.yml
 - import_playbook: ../airflow_config.yml
-- import_playbook: ../airflow_dags_upload.yml
 
 # Webserver
 - import_playbook: ../airflow_webserver_install.yml
@@ -20,6 +19,9 @@
 # Worker
 - import_playbook: ../airflow_worker_install.yml
 - import_playbook: ../airflow_worker_config.yml
+
+# Upload DAGs
+- import_playbook: ../airflow_dags_upload.yml
 
 # Start/restart services
 - import_playbook: ../airflow_webserver_restart.yml

@@ -16,11 +16,6 @@
     - airflow_ssl-tls
     - airflow_kerberos
 
-- name: airflow_dags_upload
-  depends_on: 
-    - airflow_install
-    - airflow_config
-
 - name: airflow_webserver_config
   depends_on:
     - airflow_install
@@ -34,6 +29,11 @@
 
 - name: airflow_worker_config
   depends_on:
+    - airflow_install
+    - airflow_config
+
+- name: airflow_dags_upload
+  depends_on: 
     - airflow_install
     - airflow_config
 

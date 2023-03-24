@@ -11,6 +11,7 @@
     owner: "{{ airflow_user }}"
     group: "{{ airflow_group }}"
     mode: 0755
+    recurse: true
   with_items:
     - "{{ airflow_log_dir }}"
     - "{{ airflow_child_process_log_dir }}"
@@ -27,7 +28,6 @@
     group: "{{ airflow_group }}"
     mode: 0755
   with_items:
-    - "{{ airflow_log_dir }}"
     - "{{certificates_public_key}}"
     - "{{ certificates_private_key }}"
 
@@ -42,9 +42,9 @@
     dest: "/etc/profile.d/airflow.sh"
   register: airflow_profile
 
-- name: Airflow | Reload Airflow profile
-  shell: source /etc/profile.d/airflow.sh
-  when: airflow_profile.changed
+# - name: Airflow | Reload Airflow profile
+#   shell: source /etc/profile.d/airflow.sh
+#   when: airflow_profile.changed
 
 - name: Airflow | Database Init
   shell: "{{ airflow_executable }} db init"

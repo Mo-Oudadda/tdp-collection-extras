@@ -34,6 +34,11 @@
     src: constraints-3.6.txt.j2
     dest: /tmp/constraints-3.6.txt
 
+- name: Airflow | Install Required packages
+  yum:
+    pkg: "{{ airflow_required_packages }}"
+    state: present
+
 - name: Airflow | Install Python dependencies
   pip:
     name: "{{ airflow_required_python_packages }}"
@@ -45,11 +50,6 @@
     name: "apache-airflow[celery, kerberos]=={{ airflow_version }}"
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt
-
-- name: Airflow | Install Required packages
-  yum:
-    pkg: "{{ airflow_required_packages }}"
-    state: present
 
 - name: Airflow | Pip install flower
   pip:

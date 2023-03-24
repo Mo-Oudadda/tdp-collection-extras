@@ -39,7 +39,7 @@ airflow_admin_pass: admin123
 # Airflow config
 airflow_executor: CeleryExecutor
 airflow_result_backend: "db+postgresql://{{ airflow_db_user }}:{{ airflow_db_pass }}@{{ airflow_db_host }}:{{ airflow_db_port }}/{{ airflow_db_name }}"
-airflow_broker_url: "redis://edge-01:6379/0"
+airflow_broker_url: "redis://master-01:6379/0"
 
 # Required packages
 airflow_required_packages:

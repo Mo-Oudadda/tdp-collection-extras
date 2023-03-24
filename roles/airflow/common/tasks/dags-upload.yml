@@ -10,3 +10,4 @@
     group: "{{ airflow_group }}"
   with_fileglob:
     - "{{ airflow_dags_files_path }}/*"
+  when: airflow_dags_files_path is defined
