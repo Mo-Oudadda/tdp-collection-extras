@@ -45,20 +45,3 @@
 # - name: Airflow | Reload Airflow profile
 #   shell: source /etc/profile.d/airflow.sh
 #   when: airflow_profile.changed
-
-- name: Airflow | Database Init
-  shell: "{{ airflow_executable }} db init"
-  environment:
-    AIRFLOW_HOME: "{{ airflow_install_dir }}"
-
-- name: Airflow | Create admin user
-  shell: |
-    "{{ airflow_executable }}" users create \
-      --username {{ airflow_admin_user }} \
-      --password {{ airflow_admin_pass }} \
-      --role Admin \
-      --firstname admin \
-      --lastname admin \
-      --email admin@tdp
-  environment:
-    AIRFLOW_HOME: "{{ airflow_install_dir }}"

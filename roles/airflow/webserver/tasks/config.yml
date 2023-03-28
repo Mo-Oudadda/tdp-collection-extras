@@ -16,3 +16,20 @@
   template:
     src: airflow-webserver.service.j2
     dest: /usr/lib/systemd/system/airflow-webserver.service
+
+- name: Airflow | Database Init
+  shell: "{{ airflow_executable }} db init"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Create admin user
+  shell: |
+    "{{ airflow_executable }}" users create \
+      --username {{ airflow_admin_user }} \
+      --password {{ airflow_admin_pass }} \
+      --role Admin \
+      --firstname admin \
+      --lastname admin \
+      --email admin@tdp
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
