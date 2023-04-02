@@ -68,6 +68,7 @@
     name: apache-airflow-providers-apache-hive
     executable: pip3
     extra_args: --constraint /tmp/constraints-3.6.txt
+  register: airflow_hive
 
 - name: Airflow | Pip install apache-spark provider
   pip:

@@ -68,10 +68,17 @@ ssl_private_key: "{{ airflow_private_key }}"
 
 # Kerberos
 krb_create_principals_keytabs: yes
-kerberos:
-  airflow_keytab: "/etc/security/keytabs/airflow.service.keytab"
-  airflow_principal: "airflow/{{ ansible_fqdn }}@{{ realm }}"
-  kinit_path: "/usr/bin/kinit"
+
+# Hive Connection
+hive:
+  conn_id: hiveserver2_tdp
+  conn_type: hive_cli
+  host: master-03.tdp
+  schema: default
+  port: 10001
+  use_beeline: "true"
+  proxy_user: "tdp_user"
+  principal: "hive/master-03.tdp@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=Truststore123!"
 
 # Example DAGs files
 airflow_dags_files_path: "files/airflow_example_dags"

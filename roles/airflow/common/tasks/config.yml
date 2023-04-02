@@ -14,27 +14,31 @@
     recurse: true
   with_items:
     - "{{ airflow_log_dir }}"
-    - "{{ airflow_child_process_log_dir }}"
     - "{{ airflow_root_conf_dir }}"
     - "{{ airflow_dag_dir }}"
     - "{{ airflow_plugins_dir }}"
 
-- name: Airflow | Change ownership and permissions of Airflow SSL keys
+- name: Change ownership and permissions of Airflow logs and SSL keys
   become: yes
   become_user: root
   file:
-    path: "{{ item }}"
-    owner: "{{ airflow_user }}"
-    group: "{{ airflow_group }}"
-    mode: 0755
+    path: "{{ item.path }}"
+    owner: airflow
+    group: airflow
+    mode: "{{ item.mode }}"
   with_items:
-    - "{{certificates_public_key}}"
-    - "{{ certificates_private_key }}"
+    - { path: '/etc/ssl/certs/{{ ansible_fqdn }}.key', mode: '755' }
+    - { path: '/etc/ssl/certs/{{ ansible_fqdn }}.pem', mode: '755' }
 
 - name: Airflow | Copy airflow.cfg file
   template:
     src: airflow.cfg.j2
     dest: "{{ airflow_install_dir }}/airflow.cfg"
+
+- name: Airflow | Copy webserver_config.py file
+  template:
+    src: webserver_config.py.j2
+    dest: "{{ airflow_install_dir }}/webserver_config.py"
 
 - name: Airflow | Copy profile.d file
   template:
@@ -42,6 +46,12 @@
     dest: "/etc/profile.d/airflow.sh"
   register: airflow_profile
 
-# - name: Airflow | Reload Airflow profile
-#   shell: source /etc/profile.d/airflow.sh
-#   when: airflow_profile.changed
+- name: Airflow | Reload Airflow profile
+  shell: source /etc/profile.d/airflow.sh
+  when: airflow_profile.changed
+
+- name: Airflow | Change default beeline
+  become: yes
+  become_user: root
+  shell: mv /usr/local/bin/beeline{,.airflow.bkp}
+  when: airflow_hive.changed

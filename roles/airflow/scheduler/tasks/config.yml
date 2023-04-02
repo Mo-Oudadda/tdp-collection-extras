@@ -22,3 +22,14 @@
     path: /etc/redis.conf
     regexp: '^bind'
     line: 'bind 0.0.0.0'
+
+- name: Airflow | Change ownership and permissions of Airflow logs
+  become: yes
+  become_user: root
+  file:
+    path: "{{ item.path }}"
+    owner: airflow
+    group: airflow
+    mode: "{{ item.mode }}"
+  with_items:
+    - { path: '{{ airflow_child_process_log_dir }}', mode: '755' }

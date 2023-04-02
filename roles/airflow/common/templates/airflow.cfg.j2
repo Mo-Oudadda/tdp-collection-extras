@@ -917,9 +917,9 @@ default_capacity = 1000
 
 [kerberos]
 ccache = /tmp/airflow_krb5_ccache
-keytab = {{ kerberos.airflow_keytab }}
+keytab = /etc/security/keytabs/airflow.service.keytab
 reinit_frequency = 3600
-principal = {{ kerberos.airflow_principal }}
+principal = airflow/_HOST@REALM.TDP
 
 # Allow to disable ticket forwardability.
 forwardable = True

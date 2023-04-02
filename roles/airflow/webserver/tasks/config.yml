@@ -7,11 +7,6 @@
 #     name: tosit.tdp_extra.airflow.common
 #     tasks_from: config
 
-- name: Airflow | Copy webserver_config.py file
-  template:
-    src: webserver_config.py.j2
-    dest: "{{ airflow_install_dir }}/webserver_config.py"
-
 - name: Airflow | Copy webserver service file
   template:
     src: airflow-webserver.service.j2
@@ -33,3 +28,22 @@
       --email admin@tdp
   environment:
     AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Delete hive connection '{{ hive.conn_id }}' if exists
+  shell: "{{ airflow_executable }} connections delete {{ hive.conn_id }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  ignore_errors: true
+
+- name: Airflow | Add hive connection '{{ hive.conn_id }}'
+  shell: |
+    "{{ airflow_executable }}" connections add {{ hive.conn_id }} \
+      --conn-type {{ hive.conn_type }} \
+      --conn-host {{ hive.host }} \
+      --conn-schema {{ hive.schema }} \
+      --conn-port {{ hive.port }} \
+      --conn-extra '{"use_beeline": "{{ hive.use_beeline }}", "proxy_user": "{{ hive.proxy_user }}", "principal": "{{ hive.principal }}"}'
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
