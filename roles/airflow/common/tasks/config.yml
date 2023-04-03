@@ -35,6 +35,11 @@
     src: airflow.cfg.j2
     dest: "{{ airflow_install_dir }}/airflow.cfg"
 
+- name: Airflow | Copy airflow kerberos service file
+  template:
+    src: airflow-kerberos.service.j2
+    dest: /usr/lib/systemd/system/airflow-kerberos.service
+
 - name: Airflow | Copy webserver_config.py file
   template:
     src: webserver_config.py.j2

@@ -31,5 +31,6 @@
     owner: airflow
     group: airflow
     mode: "{{ item.mode }}"
+    recurse: yes
   with_items:
     - { path: '{{ airflow_child_process_log_dir }}', mode: '755' }
