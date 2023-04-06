@@ -47,3 +47,20 @@
   environment:
     AIRFLOW_HOME: "{{ airflow_install_dir }}"
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+
+- name: Airflow | Delete spark3 connection '{{ spark3.conn_id }}' if exists
+  shell: "{{ airflow_executable }} connections delete {{ spark3.conn_id }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  ignore_errors: true
+
+- name: Airflow | Add spark3 connection '{{ spark3.conn_id }}'
+  shell: |
+    "{{ airflow_executable }}" connections add {{ spark3.conn_id }} \
+      --conn-type {{ spark3.conn_type }} \
+      --conn-host {{ spark3.host }} \
+      --conn-extra '{"proxy_user": "{{ spark3.proxy_user }}"}'
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
