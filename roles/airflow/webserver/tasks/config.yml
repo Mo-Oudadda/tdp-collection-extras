@@ -59,8 +59,7 @@
   shell: |
     "{{ airflow_executable }}" connections add {{ spark3.conn_id }} \
       --conn-type {{ spark3.conn_type }} \
-      --conn-host {{ spark3.host }} \
-      --conn-extra '{"proxy_user": "{{ spark3.proxy_user }}"}'
+      --conn-host {{ spark3.host }}
   environment:
     AIRFLOW_HOME: "{{ airflow_install_dir }}"
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"

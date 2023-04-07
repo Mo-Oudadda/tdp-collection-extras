@@ -20,6 +20,7 @@ airflow_dag_dir: "{{ airflow_install_dir }}/dags"
 airflow_plugins_dir: "{{ airflow_install_dir }}/plugins"
 airflow_child_process_log_dir: "{{ airflow_log_dir }}/scheduler"
 airflow_certs_dir: "{{ airflow_root_conf_dir }}/certs"
+airflow_environment_file_dir: /etc/sysconfig/airflow
 
 # Airflow Executable:
 airflow_executable: /usr/local/bin/airflow
@@ -88,10 +89,11 @@ spark3:
   proxy_user: "tdp_user"
 
 spark3_env:
+  AIRFLOW_HOME: "{{ airflow_install_dir }}"
   JAVA_HOME: /usr/lib/jvm/jre-1.8.0-openjdk
   HADOOP_HOME: /opt/tdp/hadoop
   HADOOP_CONF_DIR: /etc/hadoop/conf
-  SPARK_HOME: /opt/tdp/hadoop
+  SPARK_HOME: /opt/tdp/spark3
   SPARK_CONF_DIR: /etc/spark3/conf
   PYSPARK_PYTHON: python3
 

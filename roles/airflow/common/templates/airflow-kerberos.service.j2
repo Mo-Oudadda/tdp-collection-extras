@@ -23,7 +23,7 @@ Wants=network-online.target
 
 [Service]
 RuntimeDirectory=airflow-kerberos
-Environment="AIRFLOW_HOME={{ airflow_install_dir }}"
+EnvironmentFile={{ airflow_environment_file_dir }}
 User={{ airflow_user }}
 Group={{ airflow_group }}
 Type=simple
