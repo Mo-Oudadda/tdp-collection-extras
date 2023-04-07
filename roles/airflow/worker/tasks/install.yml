@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-# - name: Airflow Worker | Ensure airflow is installed
-#   import_role:
-#     name: tosit.tdp_extra.airflow.common
-#     tasks_from: install
+- name: Airflow Worker | Ensure airflow is installed
+  import_role:
+    name: tosit.tdp_extra.airflow.common
+    tasks_from: install

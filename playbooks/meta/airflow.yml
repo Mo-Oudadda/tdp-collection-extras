@@ -3,27 +3,25 @@
 
 ---
 # Install airflow
-- import_playbook: ../airflow_install.yml
-- import_playbook: ../airflow_ssl-tls.yml
-- import_playbook: ../airflow_kerberos.yml
-- import_playbook: ../airflow_config.yml
-
-# Webserver
 - import_playbook: ../airflow_webserver_install.yml
-- import_playbook: ../airflow_webserver_config.yml
-
-# Scheduler
 - import_playbook: ../airflow_scheduler_install.yml
-- import_playbook: ../airflow_scheduler_config.yml
-
-# Worker
 - import_playbook: ../airflow_worker_install.yml
+
+# configure airflow
+- import_playbook: ../airflow_webserver_config.yml
+- import_playbook: ../airflow_scheduler_config.yml
 - import_playbook: ../airflow_worker_config.yml
 
-# Upload DAGs
-- import_playbook: ../airflow_dags_upload.yml
+# Secure airflow with SSL/TLS
+- import_playbook: ../airflow_sst-tls_install.yml
 
-# Start/restart services
+# kerberize airflow
+- import_playbook: ../airflow_kerberos_install.yml
+
+# Upload DAG files
+- import_playbook: ../airflow_upload-dags.yml
+
+# Restart airflow services
 - import_playbook: ../airflow_webserver_restart.yml
 - import_playbook: ../airflow_worker_restart.yml
 - import_playbook: ../airflow_scheduler_restart.yml

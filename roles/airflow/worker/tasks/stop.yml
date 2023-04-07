@@ -1,16 +1,14 @@
 # Copyright 2022 TOSIT.IO
 # SPDX-License-Identifier: Apache-2.0
 ---
-- name: Airflow | Retart airflow-worker service
+- name: Airflow | Stop airflow-worker service
   systemd:
     name: airflow-worker
-    state: restarted
-    enabled: true
+    state: stopped
     daemon_reload: true
 
-- name: Airflow | Restart airflow-kerberos service
+- name: Airflow | Stop airflow-kerberos service
   systemd:
     name: airflow-kerberos
-    state: restarted
-    enabled: true
+    state: stopped
     daemon_reload: true

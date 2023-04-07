@@ -1,0 +1,26 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+---
+- name: Airflow | Stop redis service
+  systemd:
+    name: redis
+    state: stopped
+    daemon_reload: true
+
+- name: Airflow | Stop airflow-scheduler service
+  systemd:
+    name: airflow-scheduler
+    state: stopped
+    daemon_reload: true
+
+- name: Airflow | Stop airflow-flower service
+  systemd:
+    name: airflow-flower
+    state: stopped
+    daemon_reload: true
+
+- name: Airflow | Stop airflow-kerberos service
+  systemd:
+    name: airflow-kerberos
+    state: stopped
+    daemon_reload: true
