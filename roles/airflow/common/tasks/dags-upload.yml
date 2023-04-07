@@ -2,7 +2,18 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Airflow | Upload airflow example DAGs files
+- name: Airflow | Upload airflow DAGs templates
+  template:
+    src: "{{ item }}"
+    dest: "{{ airflow_dag_dir }}/{{ item | basename | splitext | first }}"
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+  with_items:
+    - airflow-dag-example.py.j2
+    - airflow-hive-dag-example.py.j2
+    - airflow-spark3-dag-example.py.j2
+
+- name: Airflow | Upload airflow local DAGs files
   copy:
     src: "{{ item }}"
     dest: "{{ airflow_dag_dir }}"
@@ -12,3 +23,4 @@
     - "{{ airflow_dags_files_path }}/*"
   when: airflow_dags_files_path is defined
   ignore_errors: true
+  

@@ -20,14 +20,30 @@
 - name: Airflow | Create admin user
   shell: |
     "{{ airflow_executable }}" users create \
-      --username {{ airflow_admin_user }} \
-      --password {{ airflow_admin_pass }} \
-      --role Admin \
-      --firstname admin \
-      --lastname admin \
-      --email admin@tdp
+      --username {{ item.username }} \
+      --password {{ item.password }} \
+      --role {{ item.role }} \
+      --firstname {{ item.firstname }} \
+      --lastname {{ item.lastname }} \
+      --email {{ item.email }}
+  with_items: "{{ airflow_admin }}"
   environment:
     AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Create other users
+  shell: |
+    "{{ airflow_executable }}" users create \
+      --username {{ item.username }} \
+      --password {{ item.password }} \
+      --role {{ item.role }} \
+      --firstname {{ item.firstname }} \
+      --lastname {{ item.lastname }} \
+      --email {{ item.email }}
+  with_items: "{{ airflow_users }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+  when: airflow_users is defined
+
 
 - name: Airflow | Delete hive connection '{{ hive.conn_id }}' if exists
   shell: "{{ airflow_executable }} connections delete {{ hive.conn_id }}"
