@@ -101,7 +101,7 @@ spark3:
   conn_id: spark3_tdp
   conn_type: spark
   host: yarn
-  proxy_user: tdp_user
+  proxy_user: tdp_user # spark-submit parameter inside the DAG file
 
 spark3_env:
   JAVA_HOME: /usr/lib/jvm/jre-1.8.0-openjdk
