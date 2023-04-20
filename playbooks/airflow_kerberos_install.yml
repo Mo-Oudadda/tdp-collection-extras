@@ -1,13 +1,39 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
 ---
-- name: "Kerberos Airflow"
-  hosts: airflow
+- name: Deploy airflow | Kerberize airflow webserver
+  hosts: airflow_webserver
   strategy: linear
   tasks:
     - tosit.tdp.resolve: # noqa unnamed-task
-        node_name: airflow
-    - name: "Kerberos Airflow"
+        node_name: airflow_webserver
+    - name: Kerberize airflow webserver
       import_role:
         name: tosit.tdp_extra.airflow.common
         tasks_from: kerberos
     - meta: clear_facts # noqa unnamed-task
 
+- name: Deploy airflow | Kerberize airflow scheduler
+  hosts: airflow_scheduler
+  strategy: linear
+  tasks:
+    - tosit.tdp.resolve: # noqa unnamed-task
+        node_name: airflow_scheduler
+    - name: Kerberize airflow scheduler
+      import_role:
+        name: tosit.tdp_extra.airflow.common
+        tasks_from: kerberos
+    - meta: clear_facts # noqa unnamed-task
+
+- name: Deploy airflow | Kerberize airflow worker
+  hosts: airflow_worker
+  strategy: linear
+  tasks:
+    - tosit.tdp.resolve: # noqa unnamed-task
+        node_name: airflow_worker
+    - name: Kerberize airflow worker
+      import_role:
+        name: tosit.tdp_extra.airflow.common
+        tasks_from: kerberos
+    - meta: clear_facts # noqa unnamed-task

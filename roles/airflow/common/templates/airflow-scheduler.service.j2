@@ -22,11 +22,14 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-Environment="AIRFLOW_HOME={{ airflow_install_dir }}"
+RuntimeDirectory=airflow-scheduler
+Environment="PATH=/opt/tdp/airflow/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+EnvironmentFile={{ airflow_environment_file_dir }}
 User={{ airflow_user }}
-Group={{ hadoop_group }}
+Group={{ airflow_group }}
 Type=simple
-ExecStart=/usr/local/bin/airflow scheduler --pid {{ airflow_pid_dir }}/scheduler.pid
+ExecStart={{ airflow_executable }} scheduler --pid {{ airflow_pid_dir }}-scheduler/scheduler.pid
+KillSignal=SIGINT
 Restart=always
 RestartSec=5s
 

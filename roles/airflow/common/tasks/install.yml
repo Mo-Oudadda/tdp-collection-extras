@@ -1,0 +1,112 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Airflow | Add airflow group
+  group:
+    name: "{{ airflow_group }}"
+
+- name: Airflow | Add airflow user
+  user:
+    name: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+
+- name: Airfloww | Ensures airflow install, certificates and configuration directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ airflow_root_dir }}/airflow-{{ airflow_version }}"
+    - "{{ airflow_certs_dir }}"
+    - "{{ airflow_root_conf_dir }}"
+
+- name: Airflow | Create symbolic link to Airflow installation
+  file:
+    src: "{{ airflow_root_dir }}/airflow-{{ airflow_version }}"
+    dest: "{{ airflow_install_dir }}"
+    state: link
+
+- name: Airflow | Install Required packages
+  yum:
+    pkg: "{{ airflow_required_packages }}"
+    state: present
+
+- name: Airflow | Check if Python {{ airflow_python_version }} is installed
+  shell: "{{ airflow_python }} --version | rev | cut -d ' ' -f1 | rev"
+  register: airflow_python_version_check
+  ignore_errors: true
+
+- name: Airflow | Download Python {{ airflow_python_version }}
+  get_url:
+    url: "https://www.python.org/ftp/python/{{ airflow_python_version }}/Python-{{ airflow_python_version }}.tgz"
+    dest: "/tmp/Python-{{ airflow_python_version }}.tgz"
+  when: airflow_python_version_check.stdout != "{{ airflow_python_version }}"
+  register: airflow_python_download
+
+- name: Airflow | Extract Python {{ airflow_python_version }}
+  unarchive:
+    src: "/tmp/Python-{{ airflow_python_version }}.tgz"
+    dest: "/tmp"
+    remote_src: true
+    creates: "/tmp/Python-{{ airflow_python_version }}"
+  when: airflow_python_download.changed
+
+- name: Airflow | Configure and Install Python {{ airflow_python_version }}
+  become: true
+  shell: >
+    ./configure --enable-optimizations --prefix=/usr/local &&
+    make altinstall
+  args:
+    chdir: "/tmp/Python-{{ airflow_python_version }}"
+  when: airflow_python_download.changed
+
+- name: Airflow | Install virtualenv in {{ airflow_python }}
+  become: true
+  shell: "/usr/local/bin/{{ airflow_python }} -m pip install virtualenv"
+
+- name: Airflow | Check if exists virtualenv
+  stat:
+    path: "{{ airflow_install_dir }}/bin"
+  register: virtualenv
+
+- name: Airflow | Create a virtualenv
+  shell: "virtualenv --system-site-packages -p /usr/local/bin/{{ airflow_python }} {{ airflow_install_dir }}"
+  when: not virtualenv.stat.exists
+  
+- name: Airflow | upgrade pip
+  pip:
+    name: pip
+    extra_args: --upgrade
+    virtualenv: "{{ airflow_install_dir }}"
+    virtualenv_python: "{{ airflow_python }}"
+
+- name: Airflow | Copy constraints file
+  template:
+    src: "{{ airflow_constraints_file }}.j2"
+    dest: /tmp/{{ airflow_constraints_file }}
+
+- name: Airflow | Install Python dependencies
+  pip:
+    name: "{{ airflow_required_python_packages }}"
+    virtualenv: "{{ airflow_install_dir }}"
+    virtualenv_python: "{{ airflow_python }}"
+  when: airflow_required_python_packages is defined
+
+- name: Airflow | Pip install airflow {{ airflow_version }}
+  pip:
+    name: "apache-airflow=={{ airflow_version }}"
+    virtualenv: "{{ airflow_install_dir }}"
+    virtualenv_python: "{{ airflow_python }}"
+    extra_args: --constraint /tmp/{{ airflow_constraints_file }}
+
+- name: Airflow | Pip install airflow extra packages
+  pip:
+    name: "{{ airflow_extra_packages }}"
+    virtualenv: "{{ airflow_install_dir }}"
+    virtualenv_python: "{{ airflow_python }}"
+    extra_args: --constraint /tmp/{{ airflow_constraints_file }}
+  when: airflow_extra_packages is defined
+

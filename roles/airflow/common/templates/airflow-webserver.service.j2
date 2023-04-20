@@ -22,14 +22,16 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-Environment="AIRFLOW_HOME={{ airflow_install_dir }}"
+RuntimeDirectory=airflow-webserver
+Environment="PATH=/opt/tdp/airflow/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+EnvironmentFile={{ airflow_environment_file_dir }}
 User={{ airflow_user }}
-Group={{ hadoop_group }}
+Group={{ airflow_group }}
 Type=simple
-ExecStart=/usr/local/bin/airflow webserver --pid {{ airflow_pid_dir }}/webserver.pid
+KillSignal=SIGINT
+ExecStart={{ airflow_executable }} webserver --pid {{ airflow_pid_dir }}-webserver/webserver.pid
 Restart=on-failure
 RestartSec=5s
-PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target

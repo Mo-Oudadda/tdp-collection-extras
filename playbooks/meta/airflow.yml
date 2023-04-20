@@ -2,23 +2,26 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- import_playbook: ../airflow_install.yml
-- import_playbook: ../airflow_ssl-tls_install.yml
-- import_playbook: ../airflow_kerberos_install.yml
+# Install airflow
 - import_playbook: ../airflow_webserver_install.yml
 - import_playbook: ../airflow_scheduler_install.yml
-- import_playbook: ../airflow_executor_install.yml
-- import_playbook: ../airflow_broker_install.yml
-- import_playbook: ../airflow_flower_install.yml
-# airflow_install
+- import_playbook: ../airflow_worker_install.yml
+
+# configure airflow
 - import_playbook: ../airflow_webserver_config.yml
 - import_playbook: ../airflow_scheduler_config.yml
-- import_playbook: ../airflow_executor_config.yml
-- import_playbook: ../airflow_broker_config.yml
-- import_playbook: ../airflow_flower_config.yml
-- import_playbook: ../airflow_config.yml
-# airflow_config
-# - import_playbook: ../airflow_server_start.yml
-# airflow_server_init
-# airflow_start
-# airflow_init
+- import_playbook: ../airflow_worker_config.yml
+
+# Secure airflow with SSL/TLS
+- import_playbook: ../airflow_sst-tls_install.yml
+
+# kerberize airflow
+- import_playbook: ../airflow_kerberos_install.yml
+
+# Upload DAG files
+- import_playbook: ../airflow_upload-dags.yml
+
+# Restart airflow services
+- import_playbook: ../airflow_webserver_restart.yml
+- import_playbook: ../airflow_worker_restart.yml
+- import_playbook: ../airflow_scheduler_restart.yml

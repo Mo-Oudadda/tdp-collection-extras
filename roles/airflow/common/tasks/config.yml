@@ -1,0 +1,84 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Airflow | Ensure airflow directories
+  become: yes
+  become_user: root
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+    mode: 0755
+    recurse: true
+  with_items:
+    - "{{ airflow_root_conf_dir }}"
+    - "{{ airflow_dag_dir }}"
+    - "{{ airflow_plugins_dir }}"
+    - "{{ airflow_log_dir }}"
+    - "{{ airflow_child_process_log_dir }}"
+
+- name: Airflow | Copy airflow.cfg file
+  template:
+    src: "{{ airflow_conf_template }}.j2"
+    dest: "{{ airflow_install_dir }}/airflow.cfg"
+
+- name: Airflow | Copy airflow kerberos service file
+  template:
+    src: airflow-kerberos.service.j2
+    dest: /usr/lib/systemd/system/airflow-kerberos.service
+
+- name: Airflow | Copy webserver_config.py file
+  template:
+    src: webserver_config.py.j2
+    dest: "{{ airflow_install_dir }}/webserver_config.py"
+
+- name: Airflow | Copy profile.d file
+  template:
+    src: airflow-profile.d.j2
+    dest: "/etc/profile.d/airflow.sh"
+    mode: 0644
+  register: airflow_profile
+
+- name: Airflow | Reload Airflow profile
+  shell: source /etc/profile.d/airflow.sh
+  when: airflow_profile.changed
+
+- name: Airflow | Copy Environment File
+  template:
+    src: airflow-env.j2
+    dest: "{{ airflow_environment_file_dir }}"
+    mode: 0644
+    owner: "{{ airflow_user }}"
+    group: "{{ airflow_group }}"
+
+- name: Airflow | Change default beeline
+  become: yes
+  become_user: root
+  shell: mv {{ airflow_install_dir }}/bin/beeline{,.airflow.bkp}
+  ignore_errors: true
+
+- name: Airflow | Create symbolic link to Airflow executable
+  file:
+    src: /opt/tdp/airflow/bin/airflow
+    dest: /usr/bin/airflow
+    state: link
+
+- name: Add airflow to sudoers file
+  become: yes
+  lineinfile:
+    path: /etc/sudoers
+    line: 'airflow ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+    backup: yes
+  ignore_errors: true
+
+- name: Airflow| Add users to the airflow group
+  become: yes
+  user:
+    name: "{{ item.username }}"
+    groups: "{{ airflow_group }}"
+    append: yes
+  with_items: "{{ airflow_users }}"
+  ignore_errors: true

@@ -1,11 +1,15 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
 ---
-- name: "Config Airflow Scheduler"
-  hosts: airflow_webserver
+- name: Deploy airflow | Scheduler Config
+  hosts: airflow_scheduler
   strategy: linear
   tasks:
     - tosit.tdp.resolve: # noqa unnamed-task
-        node_name: airflow_webserver
-    - import_role:
+        node_name: airflow_scheduler
+    - name: Config airflow scheduler
+      import_role:
         name: tosit.tdp_extra.airflow.scheduler
         tasks_from: config
     - meta: clear_facts # noqa unnamed-task

@@ -1,0 +1,64 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Airflow Webserver | Ensure airflow is configured
+  import_role:
+    name: tosit.tdp_extra.airflow.common
+    tasks_from: config
+
+- name: Airflow | Copy webserver service file
+  template:
+    src: airflow-webserver.service.j2
+    dest: /usr/lib/systemd/system/airflow-webserver.service
+
+- name: Airflow | Database Init
+  shell: "{{ airflow_executable }} db init"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Create admin user
+  shell: |
+    "{{ airflow_executable }}" users create \
+      --username {{ item.username }} \
+      --password {{ item.password }} \
+      --role {{ item.role }} \
+      --firstname {{ item.firstname }} \
+      --lastname {{ item.lastname }} \
+      --email {{ item.email }}
+  with_items: "{{ airflow_admin }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Create other users
+  shell: |
+    "{{ airflow_executable }}" users create \
+      --username {{ item.username }} \
+      --password {{ item.password }} \
+      --role {{ item.role }} \
+      --firstname {{ item.firstname }} \
+      --lastname {{ item.lastname }} \
+      --email {{ item.email }}
+  with_items: "{{ airflow_users }}"
+  when: airflow_users is defined
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+
+- name: Airflow | Delete connections
+  command: "{{ airflow_executable }} connections delete {{ item.conn_id }}"
+  with_items: "{{ airflow_connections }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+  when: airflow_connections_reset
+  ignore_errors: true
+
+- name: Airflow | Add connections
+  shell: >
+    "{{ airflow_executable }}" connections add {{ item.conn_id }}
+    {%- for key, value in item.items() if key != 'conn_id' %}
+    --{{ key }} {{ value }}
+    {%- endfor %}
+  with_items: "{{ airflow_connections }}"
+  environment:
+    AIRFLOW_HOME: "{{ airflow_install_dir }}"
+  ignore_errors: true
